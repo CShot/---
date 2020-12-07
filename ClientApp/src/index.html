@@ -1,0 +1,177 @@
+<!doctype html>
+<html ng-app="purchaseApp">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head>
+<body ng-controller="purchaseController">
+  <div class="page-header">
+    <h1> Список полисов </h1>
+  </div>
+  <div class="panel">
+    <nav class="navbar">
+
+      <form class="form-inline w-100">
+        <div class="form-group">
+          <div>
+            <input class="form-control" ng-model="number" placeholder="Номер полиса" maxlength="10" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <input class="form-control" ng-model="fullName" placeholder="ФИО" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-8">
+            <button class="btn btn-default" ng-click="addItem(number, fullName)">Добавить</button>
+          </div>
+        </div>
+
+
+        <div class="ml-auto">
+          <div class="col-md-6">
+            <input class="form-control" ng-model="filter" placeholder="Фильтр" ng-change="setFilter()"/>
+          </div>
+        </div>
+
+      </form>
+
+    </nav>
+
+    <dialog id="window">
+
+      <input class="form-control" ng-model="dialogNumber" placeholder="Номер" maxlength="10"/>
+      <input class="form-control" ng-model="dialogDateOfCreation" placeholder="Дата создания" />
+      <input class="form-control" ng-model="dialogFullName" placeholder="ФИО" />
+
+      <button ng-click="dialogChangeItem()">Изменить</button>
+      <button ng-click="dialogExit()">Отменить</button>
+
+    </dialog>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Номер полиса</th>
+          <th>Дата создания</th>
+          <th>ФИО</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in filterList">
+          <td><a href="" ng-click="changeItem(this.item)">{{item.number}}</a></td>
+          <td>{{item.dateOfCreation}}</td>
+          <td>{{item.fullName}}</td>
+          <td>
+            <div class="form-group">
+              <div class="col-md-offset-2 col-md-8">
+                <button class="btn btn-default" ng-click="deleteItem(this.item)">Удалить</button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script>
+    let purchaseApp = angular.module("purchaseApp", []);
+    purchaseApp.controller("purchaseController", function ($scope, $http) {
+
+      $scope.filter = "";
+      $scope.number = "";
+      $scope.fullName = "";
+
+      $http.get('/InsurancePolicy')
+        .then((result) => {
+          $scope.list = result.data;
+          $scope.setFilter();
+        });
+
+      $scope.addItem = function (number, fullName) {
+
+        let policy = {
+          number: number,
+          fullName: fullName
+        };
+
+        $http.post('/InsurancePolicy', policy)
+          .then((result) => {
+            $scope.list = result.data;
+
+            $scope.setFilter();
+          });
+
+      }
+
+      $scope.deleteItem = function (item) {
+
+        let ID = item.id;
+
+        $http.delete('/InsurancePolicy/' + ID, ID)
+          .then((result) => {
+            $scope.list = result.data;
+
+            $scope.setFilter();
+          });
+
+      }
+
+      $scope.changeItem = function (item) {
+        var dialog = document.getElementById('window');
+
+        $scope.dialogNumber = item.number;
+        $scope.dialogDateOfCreation = item.dateOfCreation;
+        $scope.dialogFullName = item.fullName;
+
+        $scope.dialogItem = item;
+
+        dialog.show();
+
+      }
+
+      $scope.dialogChangeItem = function () {
+        var dialog = document.getElementById('window');
+
+        let policy = {
+          ID: $scope.dialogItem.id,
+          number: $scope.dialogNumber,
+          dateOfCreation: $scope.dialogDateOfCreation,
+          fullName: $scope.dialogFullName
+        };
+
+        $http.put('/InsurancePolicy', policy)
+          .then((result) => {
+            $scope.list = result.data;
+
+            let filter = $scope.filter;
+            $scope.filterList = $scope.list.filter((policy) => policy.number.includes(filter) || policy.dateOfCreation.includes(filter) || policy.fullName.includes(filter));
+          });
+
+        dialog.close();
+      }
+
+      $scope.dialogExit = function () {
+
+        var dialog = document.getElementById('window');
+
+        dialog.close();
+
+      }
+
+      $scope.setFilter = function () {
+
+        let filter = $scope.filter;
+        $scope.filterList = $scope.list.filter((policy) => policy.number.includes(filter) || policy.dateOfCreation.includes(filter) || policy.fullName.includes(filter));
+
+      }
+
+    });
+  </script>
+</body>
+</html>
