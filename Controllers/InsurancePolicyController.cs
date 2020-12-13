@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace Insurance_policy.Controllers
 {
@@ -12,7 +10,7 @@ namespace Insurance_policy.Controllers
     [Route("[controller]")]
     public class InsurancePolicyController : ControllerBase
     {
-    
+
         private readonly ILogger<InsurancePolicyController> _logger;
 
         public InsurancePolicyController(ILogger<InsurancePolicyController> logger)
@@ -21,58 +19,27 @@ namespace Insurance_policy.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<InsurancePolicy> Get()
+        public IEnumerable<InsurancePolicy> GetPolicies()
         {
-            using (InsurancePolicyContext dataBase = new InsurancePolicyContext())
-            {
-                return dataBase.InsurancePolicy.ToList();
-            }          
+            return DataBaseManager.GetPoliciesFromDataBase();
         }
 
         [HttpPost]
-        public IEnumerable<InsurancePolicy> Add(InsurancePolicy policy)
+        public void AddPolicy(InsurancePolicy policy)
         {
-            using (InsurancePolicyContext dataBase = new InsurancePolicyContext())
-            {
-                policy.ID = Guid.NewGuid().ToString();
-                policy.dateOfCreation = DateTime.UtcNow;
-
-                dataBase.InsurancePolicy.Add(policy);
-                dataBase.InsurancePolicy.Add(policy);
-                dataBase.SaveChanges();
-
-                return dataBase.InsurancePolicy.ToList();
-            }
+            DataBaseManager.AddPolicyToDataBase(policy);
         }
 
         [HttpPut]
-        public IEnumerable<InsurancePolicy> Сhange(InsurancePolicy policy)
+        public void СhangePolicy(InsurancePolicy policy)
         {
-            using (InsurancePolicyContext dataBase = new InsurancePolicyContext())
-            {
-                dataBase.Update(policy);
-                dataBase.SaveChanges();
-
-                return dataBase.InsurancePolicy.ToList();
-            }
+            DataBaseManager.СhangePolicyInDataBase(policy);
         }
 
         [HttpDelete("{ID}")]
-        public IEnumerable<InsurancePolicy> Delete(string ID)
+        public void DeletePolicy(string ID)
         {
-            using (InsurancePolicyContext dataBase = new InsurancePolicyContext())
-            {
-                var InsurancePoliciesFromDelete = dataBase.InsurancePolicy.Where(val => val.ID == ID);
-
-                foreach (var policy in InsurancePoliciesFromDelete)
-                {
-                    dataBase.InsurancePolicy.Remove(policy);
-                }
-
-                dataBase.SaveChanges();
-
-                return dataBase.InsurancePolicy.ToList();
-            }
+            DataBaseManager.DeletePolicyDataBase(ID);
         }
     }
 }

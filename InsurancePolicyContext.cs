@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace Insurance_policy
 {
     class InsurancePolicyContext : DbContext
-    {
-        public DbSet<InsurancePolicy> InsurancePolicy { get; set; }
+    {       
         public InsurancePolicyContext()
         {
             Database.EnsureCreated();
@@ -16,7 +13,16 @@ namespace Insurance_policy
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=InsurancePolicy;Trusted_Connection=True;");
+            var builder = new ConfigurationBuilder();
+            builder.SetBasePath(Directory.GetCurrentDirectory());
+            builder.AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            string connectionString = config.GetConnectionString("InsurancePolicyContext");
+
+            optionsBuilder.UseSqlServer(connectionString);
         }
+
+        public DbSet<InsurancePolicy> InsurancePolicy { get; set; }
+
     }
 }
