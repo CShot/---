@@ -4,12 +4,12 @@ namespace Insurance_policy
 {
     public class InsurancePolicy
     {
-        public string ID { get; set; }
+        public string Id { get; set; }
 
-        public string number { get; set; }
+        public string Number { get; set; }
 
-        public DateTime dateOfCreation { get; set; }
+        public DateTime DateOfCreation { get; set; }
 
-        public string fullName { get; set; }
+        public string FullName { get; set; }
     }
 }

@@ -21,19 +21,19 @@ namespace Insurance_policy.Migrations
 
             modelBuilder.Entity("Insurance_policy.InsurancePolicy", b =>
                 {
-                    b.Property<string>("ID")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("dateOfCreation")
+                    b.Property<DateTime>("DateOfCreation")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("fullName")
+                    b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("number")
+                    b.Property<string>("Number")
                         .HasColumnType("nvarchar(10)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("InsurancePolicy");
                 });

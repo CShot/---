@@ -11,14 +11,14 @@ namespace Insurance_policy.Migrations
                 name: "InsurancePolicy",
                 columns: table => new
                 {
-                    ID = table.Column<string>(nullable: false),
-                    number = table.Column<string>(nullable: true),
-                    dateOfCreation = table.Column<DateTime>(nullable: false),
-                    fullName = table.Column<string>(nullable: true)
+                    Id = table.Column<string>(nullable: false),
+                    Number = table.Column<string>(nullable: true),
+                    DateOfCreation = table.Column<DateTime>(nullable: false),
+                    FullName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InsurancePolicy", x => x.ID);
+                    table.PrimaryKey("PK_InsurancePolicy", x => x.Id);
                 });
         }
 

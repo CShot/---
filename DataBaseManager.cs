@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Insurance_policy
 {
@@ -18,8 +17,8 @@ namespace Insurance_policy
         {
             using (InsurancePolicyContext dataBase = new InsurancePolicyContext())
             {
-                policy.ID = Guid.NewGuid().ToString();
-                policy.dateOfCreation = DateTime.UtcNow;
+                policy.Id = Guid.NewGuid().ToString();
+                policy.DateOfCreation = DateTime.UtcNow;
 
                 dataBase.InsurancePolicy.Add(policy);
                 dataBase.InsurancePolicy.Add(policy);
@@ -36,11 +35,11 @@ namespace Insurance_policy
             }
         }
 
-        public static void DeletePolicyDataBase(string ID)
+        public static void DeletePolicyDataBase(string id)
         {
             using (InsurancePolicyContext dataBase = new InsurancePolicyContext())
             {
-                var InsurancePoliciesFromDelete = dataBase.InsurancePolicy.Where(val => val.ID == ID);
+                var InsurancePoliciesFromDelete = dataBase.InsurancePolicy.Where(val => val.Id == id);
 
                 foreach (var policy in InsurancePoliciesFromDelete)
                 {

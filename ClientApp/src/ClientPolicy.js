@@ -17,8 +17,8 @@ purchaseApp.controller("purchaseController", function ($scope, $http) {
   $scope.addItem = async function (number, fullName) {
 
     let policy = {
-      number: number,
-      fullName: fullName
+      Number: number,
+      FullName: fullName
     };
 
     await $http.post('/InsurancePolicy', policy);
@@ -29,9 +29,9 @@ purchaseApp.controller("purchaseController", function ($scope, $http) {
 
   $scope.deleteItem = async function (item) {
 
-    let ID = item.id;
+    let id = item.id;
 
-    await $http.delete('/InsurancePolicy/' + ID, ID)
+    await $http.delete('/InsurancePolicy/' + id, id)
 
     $scope.GetListInsurancePolicies();
 
@@ -54,10 +54,10 @@ purchaseApp.controller("purchaseController", function ($scope, $http) {
     var dialog = document.getElementById('window');
 
     let policy = {
-      ID: $scope.dialogItem.id,
-      number: $scope.dialogNumber,
-      dateOfCreation: $scope.dialogDateOfCreation,
-      fullName: $scope.dialogFullName
+      Id: $scope.dialogItem.id,
+      Number: $scope.dialogNumber,
+      DateOfCreation: $scope.dialogDateOfCreation,
+      FullName: $scope.dialogFullName
     };
 
     await $http.put('/InsurancePolicy', policy);
